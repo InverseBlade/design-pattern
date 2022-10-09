@@ -76,6 +76,26 @@ namespace HungrySingleton
   };
 
   int Singleton2::refCnt = 0;
+
+  // 饿汉三
+  class Singleton3
+  {
+  public:
+    static Singleton3 &getInstance()
+    {
+      static Singleton3 instance;
+      return instance;
+    }
+
+    static Singleton3 *instance()
+    {
+      return &getInstance();
+    }
+
+  private:
+    Singleton3() {}
+  };
+
 }
 
 class SingletonTest

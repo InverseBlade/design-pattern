@@ -161,14 +161,14 @@ class PrototypeTest
 public:
   void test()
   {
-    char *str = "我的头像";
-    Resume *r1 = new ResumeA("zhangzewei", Image((uint8_t *)(str), strlen(str) + 1));
+    char *str = "This is the img of avatar !";
+    unique_ptr<Resume> r1 = make_unique<ResumeA>("zhangzewei", Image((uint8_t *)(str), strlen(str) + 1));
     auto r2 = r1->clone();
 
     r1->show();
     r2->show();
     cout << "delete r1" << endl;
-    delete r1;
+    delete r1.release();
     r2->show();
   }
 };

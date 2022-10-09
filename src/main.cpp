@@ -4,7 +4,9 @@
 #include "SimpleFactory.h"
 #include "Singleton.h"
 #include "Prototype.h"
+#include "Proxy.h"
 #include "Adapter.h"
+#include "Facade.h"
 #include <iostream>
 using namespace std;
 
@@ -16,7 +18,9 @@ int main()
     // SingletonTest demo;
     // BuilderTest demo;
     // PrototypeTest demo;
-    AdapterTest demo;
+    // AdapterTest demo;
+    // ProxyTest demo;
+    FacadeTest demo;
 
     demo.test();
     return 0;
