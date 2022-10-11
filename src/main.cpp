@@ -14,6 +14,8 @@
 #include "Strategy.h"
 #include "Template.h"
 #include "Observer.h"
+#include "Chain.h"
+#include "Iterator.h"
 #include <iostream>
 using namespace std;
 
@@ -34,7 +36,9 @@ int main()
     // DecoratorTest().test();
     // StrategyTest().test();
     // TemplateTest();
-    ObserverTest();
+    // ObserverTest();
+    // ChainTest();
+    IteratorTest();
 
     return 0;
 }
