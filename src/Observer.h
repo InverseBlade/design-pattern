@@ -136,6 +136,7 @@ public:
 
   virtual void setState(int state) override
   {
+    cout << "set State: " << state << endl;
     this->state = state;
     notify();
   }
@@ -147,9 +148,12 @@ public:
 
   virtual void notify() override
   {
-    for (auto listener : listeners)
+    cout << listeners.size() << endl;
+    for (auto it = listeners.begin(); it != listeners.end(); it++)
     {
-      listener->update();
+      cout << "before update" << endl;
+      (*it)->update();
+      cout << "after update" << endl;
     }
   }
 
@@ -205,6 +209,8 @@ void ObserverTest()
   weibo->publish("微博发的");
   weibo->setState(110);
   weibo->setState(91);
+  stu1->unsubscribe(qq);
+  stu1->unsubscribe(weibo);
   qq->setState(-1);
 }
 
