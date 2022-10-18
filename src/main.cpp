@@ -16,6 +16,10 @@
 #include "Observer.h"
 #include "Chain.h"
 #include "Iterator.h"
+#include "Command.h"
+#include "Memento.h"
+#include "State.h"
+#include "Mediator.h"
 #include <iostream>
 using namespace std;
 
@@ -38,7 +42,11 @@ int main()
     // TemplateTest();
     // ObserverTest();
     // ChainTest();
-    IteratorTest();
+    // IteratorTest();
+    // CommandTest();
+    // mementoTest();
+    StateTest();
+    MediatorTest();
 
     return 0;
 }
