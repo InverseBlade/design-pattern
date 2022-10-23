@@ -80,17 +80,17 @@ public:
 
 private:
   ArrayIterator() {}
-  ArrayIterator(shared_ptr<ArrayList> list)
+  ArrayIterator(ArrayList *list)
   {
     this->list = list;
   }
   int index = 0;
-  shared_ptr<ArrayList> list;
+  ArrayList *list;
 };
 
 shared_ptr<Iterator> ArrayList::getIterator()
 {
-  shared_ptr<ArrayIterator> ptr(new ArrayIterator(shared_ptr<ArrayList>(this)));
+  shared_ptr<ArrayIterator> ptr(new ArrayIterator(this));
   return ptr;
 }
 

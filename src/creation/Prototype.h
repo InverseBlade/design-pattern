@@ -96,6 +96,7 @@ protected:
 class ResumeA : public Resume
 {
 public:
+  ResumeA() {}
   ResumeA(const char *str)
       : ResumeA(str, Image())
   {

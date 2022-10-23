@@ -1,6 +1,6 @@
 #include <iostream>
 #include <memory>
-#include <factory_common.h>
+#include "factory_common.h"
 using namespace std;
 
 class SimpleFactory

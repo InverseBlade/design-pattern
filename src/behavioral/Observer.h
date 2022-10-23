@@ -14,15 +14,15 @@ class Observer
 public:
   virtual void update() = 0;
   virtual void onReceive(string msg) {}
-  virtual void subscribe(shared_ptr<Topic> topic) = 0;
-  virtual void unsubscribe(shared_ptr<Topic> topic) = 0;
+  virtual void subscribe(Topic *topic) = 0;
+  virtual void unsubscribe(Topic *topic) = 0;
 };
 
 class Topic
 {
 public:
-  virtual void attach(shared_ptr<Observer> observer) = 0;
-  virtual void detach(shared_ptr<Observer> observer) = 0;
+  virtual void attach(Observer *observer) = 0;
+  virtual void detach(Observer *observer) = 0;
   virtual void publish(string msg) {}
   virtual void setState(int state) {}
   virtual int getState() { return 0; }
@@ -50,23 +50,25 @@ public:
     cout << "亲爱的" << name << ",您收到一条消息：" << msg << endl;
   }
 
-  void subscribe(shared_ptr<Topic> topic) override
+  void subscribe(Topic *topic) override
   {
-    shared_ptr<Student> stu(this);
-    topic->attach(stu);
+    topic->attach(this);
     topics.insert(topic);
   }
 
-  void unsubscribe(shared_ptr<Topic> topic) override
+  void unsubscribe(Topic *topic) override
   {
-    shared_ptr<Student> stu(this);
-    topic->detach(stu);
-    topics.erase(topic);
+    topic->detach(this);
+    auto it = topics.find(topic);
+    if (it != topics.end())
+    {
+      topics.erase(it);
+    }
   }
 
 private:
   string name;
-  set<shared_ptr<Topic>> topics;
+  set<Topic *> topics;
 };
 
 class Teacher : public Observer
@@ -89,12 +91,12 @@ public:
     cout << "亲爱的" << name << ", 您收到一条消息：" << msg << endl;
   }
 
-  void subscribe(shared_ptr<Topic> topic) override
+  void subscribe(Topic *topic) override
   {
     if (this->topic == nullptr)
     {
       this->topic = topic;
-      topic->attach(shared_ptr<Teacher>(this));
+      topic->attach(this);
     }
     else
     {
@@ -102,28 +104,32 @@ public:
     }
   }
 
-  void unsubscribe(shared_ptr<Topic> topic) override
+  void unsubscribe(Topic *topic) override
   {
-    topic->detach(shared_ptr<Teacher>(this));
+    topic->detach(this);
     this->topic = nullptr;
   }
 
 private:
   string name;
-  shared_ptr<Topic> topic{nullptr};
+  Topic *topic{nullptr};
 };
 
 class MicroBlog : public Topic
 {
 public:
-  virtual void attach(shared_ptr<Observer> observer) override
+  virtual void attach(Observer *observer) override
   {
     listeners.insert(observer);
   }
 
-  virtual void detach(shared_ptr<Observer> observer) override
+  virtual void detach(Observer *observer) override
   {
-    listeners.erase(observer);
+    auto it = listeners.find(observer);
+    if (it != listeners.end())
+    {
+      listeners.erase(it);
+    }
   }
 
   virtual void publish(string msg) override
@@ -159,20 +165,24 @@ public:
 
 private:
   int state = 0;
-  set<shared_ptr<Observer>> listeners;
+  set<Observer *> listeners;
 };
 
 class IMService : public Topic
 {
 public:
-  virtual void attach(shared_ptr<Observer> observer) override
+  virtual void attach(Observer *observer) override
   {
     listeners.emplace(observer);
   }
 
-  virtual void detach(shared_ptr<Observer> observer) override
+  virtual void detach(Observer *observer) override
   {
-    listeners.erase(observer);
+    auto it = listeners.find(observer);
+    if (it != listeners.end())
+    {
+      listeners.erase(it);
+    }
   }
 
   virtual void publish(string msg) override
@@ -184,7 +194,7 @@ public:
   }
 
 private:
-  set<shared_ptr<Observer>> listeners;
+  set<Observer *> listeners;
 };
 
 void ObserverTest()
@@ -199,18 +209,18 @@ void ObserverTest()
   shared_ptr<Observer> teacher(new Teacher("Tech"));
 
   // 订阅
-  stu1->subscribe(qq);
-  stu1->subscribe(weibo);
+  stu1->subscribe(qq.get());
+  stu1->subscribe(weibo.get());
 
-  stu2->subscribe(qq);
-  teacher->subscribe(weibo);
+  stu2->subscribe(qq.get());
+  teacher->subscribe(weibo.get());
 
   qq->publish("qq发的");
   weibo->publish("微博发的");
   weibo->setState(110);
   weibo->setState(91);
-  stu1->unsubscribe(qq);
-  stu1->unsubscribe(weibo);
+  stu1->unsubscribe(qq.get());
+  stu1->unsubscribe(weibo.get());
   qq->setState(-1);
 }
 
